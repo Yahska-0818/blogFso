@@ -94,3 +94,8 @@ test('most likes returns correctly', () => {
   const result = listHelper.favoriteBlog(blogs)
   assert.deepStrictEqual(result,{ title: 'Canonical string reduction', likes: 12 })
 })
+
+test('most blogs by an author returns correctly', ()=>{
+  const result = listHelper.mostBlogs(blogs)
+  assert.deepStrictEqual(result,{ author: 'Robert C. Martin', blogs: 3 })
+})
