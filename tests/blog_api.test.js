@@ -110,6 +110,25 @@ test('blogs can be deleted', async () => {
   assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
 })
 
+test('blog likes are updated', async () => {
+  const newLikes = {"likes":21}
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+
+  const response = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(newLikes)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+  
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const likes = blogsAtEnd.map(n => n.likes)
+  
+  assert.strictEqual(likes[0],newLikes.likes)
+  
+})
+
 
 test('blogs are returned as json', async () => {
   await api
