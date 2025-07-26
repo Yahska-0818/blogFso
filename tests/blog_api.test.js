@@ -96,6 +96,20 @@ test('blog without title or url does not get added', async () => {
   assert.strictEqual(blogs.length, helper.initialBlogs.length)
 })
 
+test('blogs can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  const titles = blogsAtEnd.map(n => n.title)
+  assert(!titles.includes(blogToDelete.title))
+
+  assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+})
+
 
 test('blogs are returned as json', async () => {
   await api
@@ -103,6 +117,7 @@ test('blogs are returned as json', async () => {
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
+
 
 after(async () => {
   await mongoose.connection.close()
