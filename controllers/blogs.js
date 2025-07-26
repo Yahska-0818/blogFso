@@ -1,5 +1,5 @@
 const blogsRouter = require('express').Router()
-const { request } = require('../../notes-backend/app')
+const { findById } = require('../../notes-backend/models/note')
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
@@ -25,6 +25,18 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request,response) => {
   await Blog.findByIdAndDelete(request.params.id)
   response.status(204).end()
+})
+
+blogsRouter.put('/:id', async (request,response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(404).end()
+  }
+
+  blog.likes = request.body.likes
+
+  const updatedBlog = await blog.save()
+  response.status(200).json(updatedBlog)
 })
 
 module.exports = blogsRouter
