@@ -79,6 +79,23 @@ test('blog without likes defaults to 0 likes', async () => {
   assert.strictEqual(likes[likes.length-1],0)
 })
 
+test('blog without title or url does not get added', async () => {
+  const newBlog = {
+    _id: "5a422b891b54a676234d17fa",
+    title: "First class tests",
+    author: "Robert C. Martin",
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const blogs = await helper.blogsInDb()
+  assert.strictEqual(blogs.length, helper.initialBlogs.length)
+})
+
 
 test('blogs are returned as json', async () => {
   await api
