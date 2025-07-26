@@ -59,6 +59,26 @@ test('a valid blog can be added ', async () => {
   assert(titles.includes('Canonical string reduction'))
 })
 
+test('blog without likes defaults to 0 likes', async () => {
+  const newBlog = {
+    _id: "5a422b891b54a676234d17fa",
+    title: "First class tests",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    __v: 0
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogs = await helper.blogsInDb()
+  const likes = blogs.map(r => r.likes)
+  assert.strictEqual(likes[likes.length-1],0)
+})
+
 
 test('blogs are returned as json', async () => {
   await api
