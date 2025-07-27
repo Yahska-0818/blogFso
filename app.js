@@ -24,6 +24,7 @@ mongoose
     logger.error('error connection to MongoDB:', error.message)
   })
 
+app.use(middleware.tokenExtractor)
 app.use(middleware.requestLogger)
 
 app.use('/api/blogs', blogsRouter)
