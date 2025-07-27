@@ -1,5 +1,4 @@
 const blogsRouter = require('express').Router()
-const { findById } = require('../../notes-backend/models/note')
 const Blog = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
