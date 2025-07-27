@@ -1,5 +1,5 @@
 const assert = require('node:assert')
-const { test, after, beforeEach } = require('node:test')
+const { test, after, beforeEach, beforeAll } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -7,6 +7,9 @@ const helper = require('./test_helper')
 const Blog = require('../models/blog')
 
 const api = supertest(app)
+
+const token = process.env.USETOKEN
+
 
 beforeEach(async () => {
   await Blog.deleteMany({})
