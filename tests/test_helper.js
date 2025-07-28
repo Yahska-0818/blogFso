@@ -8,6 +8,7 @@ const initialBlogs = [
     author: "Michael Chan",
     url: "https://reactpatterns.com/",
     likes: 7,
+    user: "68872160148132eb07655b47",
     __v: 0
   },
   {
@@ -17,7 +18,7 @@ const initialBlogs = [
     url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
     likes: 5,
     __v: 0
-  }  
+  }
 ]
 
 const nonExistingId = async () => {

@@ -9,8 +9,6 @@ const Blog = require('../models/blog')
 const api = supertest(app)
 
 const token = process.env.USETOKEN
-console.log(token)
-
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -102,9 +100,10 @@ test('blog without title or url does not get added', async () => {
   assert.strictEqual(blogs.length, helper.initialBlogs.length)
 })
 
-test('blogs can be deleted', async () => {
+test.only('blogs can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
+  console.log(blogToDelete)
 
   await api.delete(`/api/blogs/${blogToDelete.id}`).set('Authorization',`Bearer ${token}`).expect(204)
 
