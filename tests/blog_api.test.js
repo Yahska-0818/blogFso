@@ -9,6 +9,7 @@ const Blog = require('../models/blog')
 const api = supertest(app)
 
 const token = process.env.USETOKEN
+console.log(token)
 
 
 beforeEach(async () => {
@@ -20,20 +21,19 @@ beforeEach(async () => {
 })
 
 test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
-
+  const response = await api.get('/api/blogs').set('Authorization',`Bearer ${token}`)
   assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
 test('a blog title is within the returned blogs', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api.get('/api/blogs').set('Authorization',`Bearer ${token}`)
 
   const titles = response.body.map(e => e.title)
   assert(titles.includes('React patterns'))
 })
 
 test('unique identifier is returned as id', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api.get('/api/blogs').set('Authorization',`Bearer ${token}`)
 
   const titles = response.body
   const keys = Object.keys(titles[0]) 
@@ -52,6 +52,7 @@ test('a valid blog can be added ', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization',`Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -73,6 +74,7 @@ test('blog without likes defaults to 0 likes', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization',`Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -92,6 +94,7 @@ test('blog without title or url does not get added', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization',`Bearer ${token}`)
     .send(newBlog)
     .expect(400)
 
@@ -103,7 +106,7 @@ test('blogs can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
 
-  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+  await api.delete(`/api/blogs/${blogToDelete.id}`).set('Authorization',`Bearer ${token}`).expect(204)
 
   const blogsAtEnd = await helper.blogsInDb()
 
@@ -120,6 +123,7 @@ test('blog likes are updated', async () => {
 
   const response = await api
     .put(`/api/blogs/${blogToUpdate.id}`)
+    .set('Authorization',`Bearer ${token}`)
     .send(newLikes)
     .expect(200)
     .expect('Content-Type', /application\/json/);
@@ -136,6 +140,7 @@ test('blog likes are updated', async () => {
 test('blogs are returned as json', async () => {
   await api
     .get('/api/blogs')
+    .set('Authorization',`Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
