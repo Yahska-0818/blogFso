@@ -1,21 +1,38 @@
 const assert = require('node:assert')
-const { test, after, beforeEach, beforeAll } = require('node:test')
+const { test, after, beforeEach } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
-const token = process.env.USETOKEN
+let token
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(helper.initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(helper.initialBlogs[1])
-  await blogObject.save()
+  await User.deleteMany({})
+
+  const testUser = {
+    username: 'testuser',
+    name: 'Test User',
+    password: 'testUser'
+  }
+
+  await api.post('/api/users').send(testUser)
+
+  const loginResponse = await api
+    .post('/api/login')
+    .send({ username: testUser.username, password: testUser.password })
+
+  token = loginResponse.body.token
+
+  const blog1 = new Blog({ ...helper.initialBlogs[0], user: loginResponse.body.id })
+  const blog2 = new Blog({ ...helper.initialBlogs[1], user: loginResponse.body.id })
+  await blog1.save()
+  await blog2.save()
 })
 
 test('all blogs are returned', async () => {
@@ -100,10 +117,9 @@ test('blog without title or url does not get added', async () => {
   assert.strictEqual(blogs.length, helper.initialBlogs.length)
 })
 
-test.only('blogs can be deleted', async () => {
+test('blogs can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
-  console.log(blogToDelete)
 
   await api.delete(`/api/blogs/${blogToDelete.id}`).set('Authorization',`Bearer ${token}`).expect(204)
 
