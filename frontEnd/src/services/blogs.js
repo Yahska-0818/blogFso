@@ -24,7 +24,7 @@ const create = async (newObject) => {
 
 const addLike = async (newObject) => {
   const config = {
-    headers: { Authorization: token}
+    headers: { Authorization: token }
   }
   const response = await axios.put(`${baseUrl}/${newObject.id}`,newObject,config)
   return response.data
@@ -32,9 +32,9 @@ const addLike = async (newObject) => {
 
 const remove = async (id) => {
   const config = {
-    headers: { Authorization: token}
+    headers: { Authorization: token }
   }
-  const response = await axios.delete(`${baseUrl}/${id}`,config)
+  await axios.delete(`${baseUrl}/${id}`,config)
 }
 
-export default { getAll, setToken, create, addLike, remove}
+export default { getAll, setToken, create, addLike, remove }

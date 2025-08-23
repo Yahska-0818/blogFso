@@ -1,4 +1,3 @@
-import axios from 'axios'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog,setBlogs,blogs }) => {
@@ -29,7 +28,7 @@ const Blog = ({ blog,setBlogs,blogs }) => {
     })
     setBlogs(changedBlogs)
   }
-  
+
   const addLike = async (blog) => {
     blog.likes++
     const updatedBlog = await blogService.addLike(blog)
@@ -56,22 +55,22 @@ const Blog = ({ blog,setBlogs,blogs }) => {
   return (
     <div style={blogListStyle}>
       {blog.showFull ?
-      <div style={fullStyle}>
-        <div>
-          {blog.title} <button onClick={() => changeStyle(blog.id)}>Hide</button>
-        </div>
-        {blog.url}
-        <div>
+        <div style={fullStyle}>
+          <div>
+            {blog.title} <button onClick={() => changeStyle(blog.id)}>Hide</button>
+          </div>
+          {blog.url}
+          <div>
           likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
+          </div>
+          {blog.author}
+          <button onClick={() => removeBlog(blog)} style={{ width:'75px' }}>remove</button>
         </div>
-        {blog.author}
-        <button onClick={() => removeBlog(blog)} style={{width:"75px"}}>remove</button>
-      </div>
-      :
-      <div style={closeStyle}>
-        {blog.title}
-        <button onClick={() => changeStyle(blog.id)}>View</button>
-      </div> }
+        :
+        <div style={closeStyle}>
+          {blog.title}
+          <button onClick={() => changeStyle(blog.id)}>View</button>
+        </div> }
     </div>
   )
 }

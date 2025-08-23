@@ -8,7 +8,7 @@ import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [title, setTitle] = useState('')
@@ -38,10 +38,10 @@ const App = () => {
       })
     }
   }, [user])
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -68,25 +68,25 @@ const App = () => {
   }
 
   const addBlog = async (event) => {
-      event.preventDefault()
-      const blogObject = {
-        title: title,
-        author: author,
-        url: url
-      }
-
-      const response  = await blogService.create(blogObject)
-      setNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`)
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
-
-      setBlogs(blogs.concat(response))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setShowBlogForm(false)
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url
     }
+
+    const response  = await blogService.create(blogObject)
+    setNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+
+    setBlogs(blogs.concat(response))
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+    setShowBlogForm(false)
+  }
 
   if (user === null) {
     return (
@@ -99,13 +99,13 @@ const App = () => {
   }
 
   const loggedInStlye = {
-    display: "flex",
-    gap: "5px",
-    alignItems: "center"
+    display: 'flex',
+    gap: '5px',
+    alignItems: 'center'
   }
 
   const buttonStyle = {
-    height: "25px"
+    height: '25px'
   }
 
   return (
@@ -118,11 +118,11 @@ const App = () => {
       </div>
       <div>
         {
-          showBlogForm 
-          ? 
-          <BlogForm addBlog={addBlog} setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} title={title} author={author} url={url}/> 
-          : 
-          <button onClick={() => setShowBlogForm(true)}>Create New Blog</button>
+          showBlogForm
+            ?
+            <BlogForm addBlog={addBlog} setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} title={title} author={author} url={url}/>
+            :
+            <button onClick={() => setShowBlogForm(true)}>Create New Blog</button>
         }
       </div>
       {blogs.map(blog =>
