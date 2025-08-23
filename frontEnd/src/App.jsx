@@ -33,6 +33,7 @@ const App = () => {
           ...blog,
           showFull: false
         }))
+        newBlogs.sort((a, b) => b.likes - a.likes)
         setBlogs(newBlogs)
       })
     }

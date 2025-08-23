@@ -38,6 +38,7 @@ const Blog = ({ blog,setBlogs,blogs }) => {
       }
       return blog
     })
+    changedBlogs.sort((a, b) => b.likes - a.likes)
     setBlogs(changedBlogs)
   }
 
