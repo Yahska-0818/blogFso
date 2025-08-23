@@ -1,3 +1,5 @@
+import blogService from '../services/blogs'
+
 const Blog = ({ blog,setBlogs,blogs }) => {
 
   const blogListStyle = {
@@ -18,15 +20,27 @@ const Blog = ({ blog,setBlogs,blogs }) => {
   }
 
   const changeStyle = (id) => {
-  const changedBlogs = blogs.map(blog => {
-    if (blog.id === id) {
-      return { ...blog, showFull: !blog.showFull }
-    }
-    return blog
-  })
-  setBlogs(changedBlogs)
-}
+    const changedBlogs = blogs.map(blog => {
+      if (blog.id === id) {
+        return { ...blog, showFull: !blog.showFull }
+      }
+      return blog
+    })
+    setBlogs(changedBlogs)
+  }
   
+  const addLike = async (blog) => {
+    blog.likes++
+    const updatedBlog = await blogService.addLike(blog)
+    const changedBlogs = blogs.map(blog => {
+      if (blog.id === updatedBlog.id) {
+        return { ...blog, likes:updatedBlog.likes }
+      }
+      return blog
+    })
+    setBlogs(changedBlogs)
+  }
+
   return (
     <div style={blogListStyle}>
       {blog.showFull ?
@@ -36,7 +50,7 @@ const Blog = ({ blog,setBlogs,blogs }) => {
         </div>
         {blog.url}
         <div>
-          likes {blog.likes} <button>like</button>
+          likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
         </div>
         {blog.author}
       </div>
