@@ -5,6 +5,7 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
+import { all } from 'axios'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -28,9 +29,10 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs )
-      )
+      blogService.getAll().then(blogs => {
+        const userBlogs = blogs.filter(blog => blog.user.id === user.id)
+        setBlogs(userBlogs)
+      })
     }
   }, [user])
   
