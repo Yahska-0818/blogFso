@@ -29,7 +29,11 @@ const App = () => {
   useEffect(() => {
     if (user) {
       blogService.getAll().then(blogs => {
-        setBlogs(blogs)
+        const newBlogs = blogs.map(blog => ({
+          ...blog,
+          showFull: false
+        }))
+        setBlogs(newBlogs)
       })
     }
   }, [user])
@@ -93,13 +97,23 @@ const App = () => {
     )
   }
 
+  const loggedInStlye = {
+    display: "flex",
+    gap: "5px",
+    alignItems: "center"
+  }
+
+  const buttonStyle = {
+    height: "25px"
+  }
+
   return (
     <div>
       <Notification message={notification} />
       <h2>blogs</h2>
-      <div>
+      <div style={loggedInStlye}>
         <h2>Logged in with {user.username}</h2>
-        <button type="button" onClick={handleLogOut}>Logout</button>
+        <button type="button" onClick={handleLogOut} style={buttonStyle}>Logout</button>
       </div>
       <div>
         {
@@ -111,7 +125,7 @@ const App = () => {
         }
       </div>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs}/>
       )}
     </div>
   )
