@@ -1,3 +1,4 @@
+import axios from 'axios'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog,setBlogs,blogs }) => {
@@ -42,6 +43,16 @@ const Blog = ({ blog,setBlogs,blogs }) => {
     setBlogs(changedBlogs)
   }
 
+  const removeBlog = async (blog) => {
+    const id = blog.id
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.remove(id)
+      const changedBlogs = blogs.filter(blog => blog.id !== id)
+      changedBlogs.sort((a, b) => b.likes - a.likes)
+      setBlogs(changedBlogs)
+    }
+  }
+
   return (
     <div style={blogListStyle}>
       {blog.showFull ?
@@ -54,6 +65,7 @@ const Blog = ({ blog,setBlogs,blogs }) => {
           likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
         </div>
         {blog.author}
+        <button onClick={() => removeBlog(blog)} style={{width:"75px"}}>remove</button>
       </div>
       :
       <div style={closeStyle}>
