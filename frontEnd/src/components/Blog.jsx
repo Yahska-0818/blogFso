@@ -1,6 +1,6 @@
 import blogService from '../services/blogs'
 
-const Blog = ({ blog,setBlogs,blogs }) => {
+const Blog = ({ blog,setBlogs,blogs,mockLike }) => {
 
   const blogListStyle = {
     paddingTop: 10,
@@ -31,6 +31,10 @@ const Blog = ({ blog,setBlogs,blogs }) => {
 
   const addLike = async (blog) => {
     blog.likes++
+    if (mockLike) {
+      mockLike(blog)
+      return
+    }
     const updatedBlog = await blogService.addLike(blog)
     const changedBlogs = blogs.map(blog => {
       if (blog.id === updatedBlog.id) {
