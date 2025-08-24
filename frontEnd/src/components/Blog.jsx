@@ -68,7 +68,7 @@ const Blog = ({ blog,setBlogs,blogs }) => {
         </div>
         :
         <div style={closeStyle}>
-          {blog.title}
+          {blog.title} {blog.author}
           <button onClick={() => changeStyle(blog.id)}>View</button>
         </div> }
     </div>
