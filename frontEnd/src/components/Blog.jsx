@@ -1,6 +1,7 @@
+import { use } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog,setBlogs,blogs,mockLike }) => {
+const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
 
   const blogListStyle = {
     paddingTop: 10,
@@ -68,7 +69,12 @@ const Blog = ({ blog,setBlogs,blogs,mockLike }) => {
           likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
           </div>
           {blog.author}
+          {user.id === blog.user.id ?
           <button onClick={() => removeBlog(blog)} style={{ width:'75px' }}>remove</button>
+          :
+          <span></span>
+          }
+          
         </div>
         :
         <div style={closeStyle}>
