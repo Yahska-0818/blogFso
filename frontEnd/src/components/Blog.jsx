@@ -69,7 +69,7 @@ const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
           likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
           </div>
           {blog.author}
-          {user.id === blog.user.id ?
+          {user.id === blog.user.id || user.id === blog.user ?
           <button onClick={() => removeBlog(blog)} style={{ width:'75px' }}>remove</button>
           :
           <span></span>

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { loginWith, makeBlog } from './helper'
+import { userInfo } from 'os'
 
 test.describe('Blog app', () => {
   test.beforeEach(async ({ page, request }) => {
@@ -44,11 +45,20 @@ test.describe('Blog app', () => {
 
     test('user can like blogs', async ({page}) => {
       await loginWith(page,'playwright','test')
-      await makeBlog(page)
+      await makeBlog(page,'writing playwright tests','sHayak','https://fullstackopen.com')
       await page.getByRole('button',{name:'View'}).click()
       await expect(page.getByText('likes 0')).toBeVisible()
       await page.getByRole('button',{name:'like'}).click()
       await expect(page.getByText('likes 1')).toBeVisible()
+    })
+    test('user can delete blogs',async ({page}) => {
+      await loginWith(page,'playwright','test')
+      await makeBlog(page,'testing with playwright','sHayak','https://fullstackopen.com')
+      await expect(page.getByText('testing with playwright sHayak')).toBeVisible()
+      await page.getByRole('button',{name:'View'}).click()
+      page.once('dialog', dialog => dialog.accept());
+      await page.getByRole('button',{name:'remove'}).click();
+      await expect(page.getByText('testing with playwright sHayak')).not.toBeVisible()
     })
   })
 })

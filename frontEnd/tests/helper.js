@@ -5,12 +5,12 @@ const loginWith = async (page, username, password)  => {
   await page.getByRole('button', { name: 'login' }).click()
 }
 
-const makeBlog = async(page) => {
+const makeBlog = async(page,title,author,url) => {
   await page.getByRole('button', { name:'Create New Blog'}).click()
   const blogTextBoxes = await page.getByRole('textbox').all()
-  await blogTextBoxes[0].fill('testing with playwright')
-  await blogTextBoxes[1].fill('sHayak')
-  await blogTextBoxes[2].fill('https://fullstackopen.com/en/part5/end_to_end_testing_playwright#exercises-5-17-5-23')
+  await blogTextBoxes[0].fill(title)
+  await blogTextBoxes[1].fill(author)
+  await blogTextBoxes[2].fill(url)
   await page.getByRole('button', { name:'Save'}).click()
 }
 
