@@ -31,12 +31,12 @@ const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
   }
 
   const addLike = async (blog) => {
-    blog.likes++
+    const blogToUpdate = { ...blog, likes: blog.likes + 1 }
     if (mockLike) {
       mockLike(blog)
       return
     }
-    const updatedBlog = await blogService.addLike(blog)
+    const updatedBlog = await blogService.addLike(blogToUpdate)
     const changedBlogs = blogs.map(blog => {
       if (blog.id === updatedBlog.id) {
         return { ...blog, likes:updatedBlog.likes }
@@ -66,7 +66,7 @@ const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
           </div>
           {blog.url}
           <div>
-          likes {blog.likes} <button onClick={() => addLike(blog)}>like</button>
+          likes {blog.likes} <button data-testid="like-button" onClick={() => addLike(blog)}>like</button>
           </div>
           {blog.author}
           {user.id === blog.user.id || user.id === blog.user ?

@@ -1,10 +1,12 @@
 const router = require('express').Router()
-const Note = require('../models/blog')
+const Blog = require('../models/blog')
 const User = require('../models/user')
 
 router.post('/reset', async (request, response) => {
-  await Note.deleteMany({})
+  await Blog.deleteMany({})
   await User.deleteMany({})
+  console.log("cleared database")
+
   response.status(204).end()
 })
 

@@ -125,9 +125,11 @@ const App = () => {
             <button onClick={() => setShowBlogForm(true)}>Create New Blog</button>
         }
       </div>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} user={user}/>
-      )}
+      <ul style={{paddingLeft:"0"}} id='blogsList'>
+        {blogs.map(blog =>
+          <li key={blog.id} style={{listStyle:"none"}}>{<Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} user={user}/>}</li>
+        )}
+      </ul>
     </div>
   )
 }
