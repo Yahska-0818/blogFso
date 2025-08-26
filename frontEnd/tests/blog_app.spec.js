@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { loginWith, makeBlog } from './helper'
 
 test.describe('Blog app', () => {
   test.beforeEach(async ({ page, request }) => {
@@ -24,22 +25,14 @@ test.describe('Blog app', () => {
       await expect(page.getByText('Logged in with playwright')).toBeVisible()
     })
     test('user cannot login with incorrect password', async ({ page }) => {
-
-      await expect(page.getByText('Log in to application')).toBeVisible()
-      const textboxes = await page.getByRole('textbox').all()
-      await textboxes[0].fill('playwright')
-      await textboxes[1].fill('wrong')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page,'playwright','wrong')
       await expect(page.getByText('Wrong credentials')).toBeVisible()
     })
   })
   
   test.describe('While logged in',()=> {
     test('user can create a blog', async ({page}) => {
-      const loginTextboxes = await page.getByRole('textbox').all()
-      await loginTextboxes[0].fill('playwright')
-      await loginTextboxes[1].fill('test')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page,'playwright','test')
       await page.getByRole('button', { name:'Create New Blog'}).click()
       const blogTextBoxes = await page.getByRole('textbox').all()
       await blogTextBoxes[0].fill('testing with playwright')
@@ -47,6 +40,15 @@ test.describe('Blog app', () => {
       await blogTextBoxes[2].fill('https://fullstackopen.com/en/part5/end_to_end_testing_playwright#exercises-5-17-5-23')
       await page.getByRole('button', { name:'Save'}).click()
       await expect(page.getByText('testing with playwright sHayak')).toBeVisible()
+    })
+
+    test('user can like blogs', async ({page}) => {
+      await loginWith(page,'playwright','test')
+      await makeBlog(page)
+      await page.getByRole('button',{name:'View'}).click()
+      await expect(page.getByText('likes 0')).toBeVisible()
+      await page.getByRole('button',{name:'like'}).click()
+      await expect(page.getByText('likes 1')).toBeVisible()
     })
   })
 })
