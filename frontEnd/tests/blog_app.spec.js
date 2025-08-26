@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test'
 import { loginWith, makeBlog } from './helper'
-import { userInfo } from 'os'
 
 test.describe('Blog app', () => {
   test.beforeEach(async ({ page, request }) => {
@@ -9,6 +8,13 @@ test.describe('Blog app', () => {
       data: {
         name: 'Shayak',
         username: 'playwright',
+        password: 'test'
+      }
+    })
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name: 'Shayak2',
+        username: 'secondUser',
         password: 'test'
       }
     })
@@ -57,8 +63,20 @@ test.describe('Blog app', () => {
       await expect(page.getByText('testing with playwright sHayak')).toBeVisible()
       await page.getByRole('button',{name:'View'}).click()
       page.once('dialog', dialog => dialog.accept());
-      await page.getByRole('button',{name:'remove'}).click();
+      await page.getByRole('button',{name:'remove'}).click()
       await expect(page.getByText('testing with playwright sHayak')).not.toBeVisible()
+    })
+    test('remove button is only visible to user who created it', async ({page}) => {
+      await loginWith(page,'playwright','test')
+      await makeBlog(page,'testing with playwright','sHayak','https://fullstackopen.com')
+      await expect(page.getByText('testing with playwright sHayak')).toBeVisible()
+      await page.getByRole('button',{name:'View'}).click()
+      await page.getByRole('button',{name:'remove'}).isVisible()
+      await page.getByRole('button',{name:'Logout'}).click()
+      await loginWith(page,'secondUser','test')
+      await expect(page.getByText('testing with playwright sHayak')).toBeVisible()
+      await page.getByRole('button',{name:'View'}).click()
+      await page.getByRole('button',{name:'remove'}).isHidden()
     })
   })
 })
