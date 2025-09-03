@@ -69,7 +69,7 @@ const App = () => {
       </div>
       <ul style={{paddingLeft:"0"}} id='blogsList'>
         {blogs.map(blog =>
-          <li key={blog.id} style={{listStyle:"none"}}>{<Blog key={blog.id} blog={blog} user={user}/>}</li>
+          <li key={blog.id} style={{listStyle:"none"}}>{<Blog key={blog.id} blog={blog}/>}</li>
         )}
       </ul>
     </div>

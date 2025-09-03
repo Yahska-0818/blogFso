@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { likeBlog, removeBlog, toggleVisibility } from '../reducers/blogReducer'
 
-const Blog = ({ blog,mockLike,user }) => {
+const Blog = ({ blog,mockLike }) => {
+
+  const user = useSelector(state=>state.user)
 
   const blogs = useSelector(state=>state.blogs)
 
