@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
-import blogService from './services/blogs'
-import loginService from './services/login'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { initBlogs } from './reducers/blogReducer'
-import { notificationAction } from './reducers/notiReducer' // Make sure this is imported
+import { initUser, logOutUser } from './reducers/userReducer'
 
 const App = () => {
+  const user = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -22,12 +21,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
+    dispatch(initUser())
   }, [])
 
   useEffect(() => {
@@ -36,37 +30,12 @@ const App = () => {
     }
   }, [user, dispatch])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      dispatch(notificationAction(`Wrong credential`,5))
-    }
-  }
-
-  const handleLogOut = async () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    blogService.setToken(null)
-    setUser(null)
-  }
-
   if (user === null) {
     return (
       <div>
         <Notification/>
         <h2>Log in to application</h2>
-        <Login handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
+        <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       </div>
     )
   }
@@ -87,7 +56,7 @@ const App = () => {
       <h2>blogs</h2>
       <div style={loggedInStlye}>
         <h2>Logged in with {user.username}</h2>
-        <button type="button" onClick={handleLogOut} style={buttonStyle}>Logout</button>
+        <button type="button" onClick={() => dispatch(logOutUser())} style={buttonStyle}>Logout</button>
       </div>
       <div>
         {
