@@ -5,11 +5,12 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
-import { notificationAction } from './reducers/notificationReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { initBlogs } from './reducers/blogReducer'
+import { notificationAction } from './reducers/notiReducer' // Make sure this is imported
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -31,16 +32,9 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      blogService.getAll().then(blogs => {
-        const newBlogs = blogs.map(blog => ({
-          ...blog,
-          showFull: false
-        }))
-        newBlogs.sort((a, b) => b.likes - a.likes)
-        setBlogs(newBlogs)
-      })
+      dispatch(initBlogs())
     }
-  }, [user])
+  }, [user, dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -65,24 +59,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     blogService.setToken(null)
     setUser(null)
-  }
-
-  const addBlog = async (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
-    }
-
-    const response  = await blogService.create(blogObject)
-    dispatch(notificationAction(`a new blog ${blogObject.title} by ${blogObject.author} added`,5))
-
-    setBlogs(blogs.concat(response))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    setShowBlogForm(false)
   }
 
   if (user === null) {
@@ -117,14 +93,14 @@ const App = () => {
         {
           showBlogForm
             ?
-            <BlogForm addBlog={addBlog} setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} title={title} author={author} url={url}/>
+            <BlogForm setShowBlogForm={setShowBlogForm} setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} title={title} author={author} url={url}/>
             :
             <button onClick={() => setShowBlogForm(true)}>Create New Blog</button>
         }
       </div>
       <ul style={{paddingLeft:"0"}} id='blogsList'>
         {blogs.map(blog =>
-          <li key={blog.id} style={{listStyle:"none"}}>{<Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} user={user}/>}</li>
+          <li key={blog.id} style={{listStyle:"none"}}>{<Blog key={blog.id} blog={blog} user={user}/>}</li>
         )}
       </ul>
     </div>

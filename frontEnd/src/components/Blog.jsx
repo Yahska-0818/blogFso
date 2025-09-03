@@ -1,8 +1,9 @@
-import { useDispatch } from 'react-redux'
-import { notificationAction } from '../reducers/notificationReducer'
-import blogService from '../services/blogs'
+import { useDispatch, useSelector } from 'react-redux'
+import { likeBlog, removeBlog, toggleVisibility } from '../reducers/blogReducer'
 
-const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
+const Blog = ({ blog,mockLike,user }) => {
+
+  const blogs = useSelector(state=>state.blogs)
 
   const dispatch = useDispatch()
 
@@ -23,68 +24,29 @@ const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
     gap: '5px'
   }
 
-  const changeStyle = (id) => {
-    const changedBlogs = blogs.map(blog => {
-      if (blog.id === id) {
-        return { ...blog, showFull: !blog.showFull }
-      }
-      return blog
-    })
-    setBlogs(changedBlogs)
-  }
-
-  const addLike = async (blog) => {
-    const blogToUpdate = { ...blog, likes: blog.likes + 1 }
-    if (mockLike) {
-      mockLike(blog)
-      return
-    }
-    const updatedBlog = await blogService.addLike(blogToUpdate)
-    const changedBlogs = blogs.map(blog => {
-      if (blog.id === updatedBlog.id) {
-        return { ...blog, likes:updatedBlog.likes }
-      }
-      return blog
-    })
-    changedBlogs.sort((a, b) => b.likes - a.likes)
-    setBlogs(changedBlogs)
-    dispatch(notificationAction(`You liked ${blog.title}`,5))
-  }
-
-  const removeBlog = async (blog) => {
-    const id = blog.id
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(id)
-      const changedBlogs = blogs.filter(blog => blog.id !== id)
-      changedBlogs.sort((a, b) => b.likes - a.likes)
-      setBlogs(changedBlogs)
-    }
-  }
-
   return (
-    <div style={blogListStyle}>
+    <div style={blogListStyle} className='blog'>
       {blog.showFull ?
         <div style={fullStyle}>
           <div>
-            {blog.title} <button onClick={() => changeStyle(blog.id)}>Hide</button>
+            {blog.title} {blog.author} <button onClick={() => dispatch(toggleVisibility(blog.id))}>Hide</button>
           </div>
-          {blog.url}
+          <div>{blog.url}</div>
           <div>
-          likes {blog.likes} <button data-testid="like-button" onClick={() => addLike(blog)}>like</button>
+            likes {blog.likes} <button data-testid="like-button" onClick={() => dispatch(likeBlog(blog))}>like</button>
           </div>
-          {blog.author}
+          <div>{blog.user.name}</div>
           {user.id === blog.user.id || user.id === blog.user ?
-          <button onClick={() => removeBlog(blog)} style={{ width:'75px' }}>remove</button>
-          :
-          <span></span>
+            <button onClick={() => dispatch(removeBlog(blog))} style={{ width:'75px' }}>remove</button>
+            : null
           }
-          
         </div>
         :
         <div style={closeStyle}>
           {blog.title} {blog.author}
-          <button onClick={() => changeStyle(blog.id)}>View</button>
-        </div> }
+          <button onClick={() => dispatch(toggleVisibility(blog.id))}>View</button>
+        </div>
+      }
     </div>
   )
 }
