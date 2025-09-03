@@ -1,7 +1,10 @@
-import { use } from 'react'
+import { useDispatch } from 'react-redux'
+import { notificationAction } from '../reducers/notificationReducer'
 import blogService from '../services/blogs'
 
 const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
+
+  const dispatch = useDispatch()
 
   const blogListStyle = {
     paddingTop: 10,
@@ -45,6 +48,7 @@ const Blog = ({ blog,setBlogs,blogs,mockLike,user }) => {
     })
     changedBlogs.sort((a, b) => b.likes - a.likes)
     setBlogs(changedBlogs)
+    dispatch(notificationAction(`You liked ${blog.title}`,5))
   }
 
   const removeBlog = async (blog) => {

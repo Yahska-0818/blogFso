@@ -5,6 +5,8 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import BlogForm from './components/BlogForm'
+import { notificationAction } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,8 +16,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const [notification, setNotification] = useState(null)
   const [showBlogForm,setShowBlogForm] = useState(false)
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -54,10 +57,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setNotification('Wrong credentials')
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(notificationAction(`Wrong credential`,5))
     }
   }
 
@@ -76,10 +76,7 @@ const App = () => {
     }
 
     const response  = await blogService.create(blogObject)
-    setNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`)
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    dispatch(notificationAction(`a new blog ${blogObject.title} by ${blogObject.author} added`,5))
 
     setBlogs(blogs.concat(response))
     setTitle('')
@@ -91,7 +88,7 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <Notification message={notification} />
+        <Notification/>
         <h2>Log in to application</h2>
         <Login handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       </div>
@@ -110,7 +107,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={notification} />
+      <Notification/>
       <h2>blogs</h2>
       <div style={loggedInStlye}>
         <h2>Logged in with {user.username}</h2>
