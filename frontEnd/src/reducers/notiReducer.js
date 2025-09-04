@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = 'Notifications will appear here'
+const initialState = ''
 
 const notiSlice = createSlice({
   name:'notification',
@@ -17,12 +17,17 @@ const notiSlice = createSlice({
 
 export const {setNotification,clearNotification} = notiSlice.actions
 
-export const notificationAction = (notification,time) => {
+let timeoutId = null;
+
+export const notificationAction = (notification, time) => {
   return dispatch => {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
     dispatch(setNotification(notification))
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       dispatch(clearNotification())
-    }, time*1000)
+    }, time * 1000)
   }
 }
 

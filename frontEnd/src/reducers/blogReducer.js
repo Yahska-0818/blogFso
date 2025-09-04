@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import BlogService from '../services/blogs'
-import { notificationAction } from "./notiReducer"; // Assuming this is the correct path
+import { notificationAction } from "./notiReducer"
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -21,24 +21,17 @@ const blogSlice = createSlice({
     filterAfterDelete(state, action) {
       const id = action.payload;
       return state.filter(blog => blog.id !== id);
-    },
-    toggleVisibility(state, action) {
-      const id = action.payload
-      const blogToChange = state.find(b => b.id === id)
-      const changedBlog = { ...blogToChange, showFull: !blogToChange.showFull }
-      return state.map(blog => blog.id !== id ? blog : changedBlog)
     }
   }
 })
 
-export const { setBlogs, appendBlog, setLike, filterAfterDelete, toggleVisibility } = blogSlice.actions
+export const { setBlogs, appendBlog, setLike, filterAfterDelete } = blogSlice.actions
 
 export const initBlogs = () => {
   return async dispatch => {
     const blogs = await BlogService.getAll()
-    const blogsWithVisibility = blogs.map(blog => ({ ...blog, showFull: false }));
-    blogsWithVisibility.sort((a, b) => b.likes - a.likes)
-    dispatch(setBlogs(blogsWithVisibility))
+    blogs.sort((a, b) => b.likes - a.likes)
+    dispatch(setBlogs(blogs))
   }
 }
 

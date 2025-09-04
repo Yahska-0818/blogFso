@@ -1,56 +1,35 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog, removeBlog, toggleVisibility } from '../reducers/blogReducer'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const Blog = ({ blog,mockLike }) => {
 
-  const user = useSelector(state=>state.user)
-
-  const blogs = useSelector(state=>state.blogs)
-
+const Blog = () => {
+  const user = useSelector(state => state.user)
+  const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
-
-  const blogListStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-  const fullStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2px'
-  }
-  const closeStyle = {
-    display: 'flex',
-    gap: '5px'
-  }
-
-  return (
-    <div style={blogListStyle} className='blog'>
-      {blog.showFull ?
-        <div style={fullStyle}>
-          <div>
-            {blog.title} {blog.author} <button onClick={() => dispatch(toggleVisibility(blog.id))}>Hide</button>
-          </div>
-          <div>{blog.url}</div>
-          <div>
-            likes {blog.likes} <button data-testid="like-button" onClick={() => dispatch(likeBlog(blog))}>like</button>
-          </div>
-          <div>{blog.user.name}</div>
-          {user.id === blog.user.id || user.id === blog.user ?
-            <button onClick={() => dispatch(removeBlog(blog))} style={{ width:'75px' }}>remove</button>
-            : null
-          }
+  const id = useParams().id
+  const blog = blogs.find(blog=>blog.id===id)
+  const navigate = useNavigate()
+  if (blog) {
+    return (
+      <>
+        <h1>{blog.title}</h1>
+        <a href={blog.url} target='#'>{blog.url}</a>
+        <div>
+          likes {blog.likes} <button data-testid="like-button" onClick={() => dispatch(likeBlog(blog))}>like</button>
         </div>
-        :
-        <div style={closeStyle}>
-          {blog.title} {blog.author}
-          <button onClick={() => dispatch(toggleVisibility(blog.id))}>View</button>
-        </div>
-      }
-    </div>
-  )
+        <p>added by {blog.author}</p>
+        {user.id === blog.user.id || user.id === blog.user ?
+          <button onClick={() => {dispatch(removeBlog(blog)); navigate('/')}} style={{ width:'75px' }}>remove</button>
+          : null
+        }
+      </>
+    )
+  } else {
+    return (
+      <h1>loading</h1>
+    )
+  }
 }
 
 export default Blog
