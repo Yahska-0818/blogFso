@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import notificationReducer from './reducers/notiReducer'
 import blogReducer from './reducers/blogReducer'
 import userReducer from './reducers/userReducer'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const store = configureStore({
   reducer:{

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import userServices from '../services/users'
 import { useParams } from 'react-router-dom'
+import { ListGroup, ListGroupItem } from 'react-bootstrap'
 
 const User = () => {
   const id = useParams().id
@@ -15,10 +16,10 @@ const User = () => {
     return (
       <>
         <h1>{user.username}</h1>
-        <h4>added blogs</h4>
-        <ul>
-          {blogs.map(blog => <li key={blog.id} >{blog.title}</li>)}
-        </ul>
+        <h4>Added blogs</h4>
+        <ListGroup>
+          {blogs.map(blog => <ListGroupItem variant='primary' key={blog.id} >{blog.title}</ListGroupItem>)}
+        </ListGroup>
       </>
     )
   } else {

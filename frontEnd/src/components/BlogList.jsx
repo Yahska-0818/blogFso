@@ -2,12 +2,10 @@ import BlogForm from './BlogForm'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Button, ListGroup, ListGroupItem } from 'react-bootstrap'
 
 const BlogList = () => {
   const blogs = useSelector(state => state.blogs)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [showBlogForm,setShowBlogForm] = useState(false)
 
   const blogListStyle = {
@@ -19,21 +17,21 @@ const BlogList = () => {
   }
 
   return (
-    <div>
+    <div style={{display:"flex",flexDirection:"column",gap:"3vh"}}>
       <div>
         {
           showBlogForm
             ?
-            <BlogForm setShowBlogForm={setShowBlogForm} setAuthor={setAuthor} setTitle={setTitle} setUrl={setUrl} title={title} author={author} url={url}/>
+            <BlogForm setShowBlogForm={setShowBlogForm}/>
             :
-            <button onClick={() => setShowBlogForm(true)}>Create New Blog</button>
+            <Button onClick={() => setShowBlogForm(true)}>Create New Blog</Button>
         }
       </div>
-      <ul style={{ paddingLeft:'0' }} id='blogsList'>
+      <ListGroup style={{ paddingLeft:'0' }} id='blogsList'>
         {blogs.map(blog =>
-          <li key={blog.id} style={blogListStyle}><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></li>
+          <ListGroupItem variant="primary" key={blog.id} style={blogListStyle}><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></ListGroupItem>
         )}
-      </ul>
+      </ListGroup>
     </div>
   )
 }
