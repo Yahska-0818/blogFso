@@ -9,7 +9,7 @@ const Blog = () => {
   const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
   const id = useParams().id
-  const blog = blogs.find(blog=>blog.id===id)
+  const blog = blogs.find(blog => blog.id===id)
   const navigate = useNavigate()
 
   const [comment,setComment] = useState('')
@@ -29,11 +29,11 @@ const Blog = () => {
           : null
         }
         <h2>comments</h2>
-        <form onSubmit={(event)=>{
+        <form onSubmit={(event) => {
           event.preventDefault()
           dispatch(addComment(blog.id,comment))
           setComment('')
-        }} style={{display:"flex",gap:"5px"}}>
+        }} style={{ display:'flex',gap:'5px' }}>
           <div>
             <input
               type="text"

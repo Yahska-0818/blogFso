@@ -47,9 +47,9 @@ const getOne = async (id) => {
 
 const commentBlog = async(id,content) => {
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
-  const request = await axios.post(`${baseUrl}/${id}/comments`,{content:content},config)
+  const request = await axios.post(`${baseUrl}/${id}/comments`,{ content:content },config)
   return request.data
 }
 

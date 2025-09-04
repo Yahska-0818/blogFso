@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 import userServices from '../services/users'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
 
 const User = () => {
   const id = useParams().id
@@ -9,7 +9,7 @@ const User = () => {
     userServices.getOne(id).then(initialUsers => {
       setUser(initialUsers)
     })
-  }, [])
+  })
   if (user) {
     const blogs = user.blogs
     return (

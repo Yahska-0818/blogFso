@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import {BrowserRouter as Router,Routes, Route, Link} from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom'
 import Notification from './components/Notification'
 import Login from './components/Login'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,12 +15,9 @@ const App = () => {
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
   useEffect(() => {
     dispatch(initUser())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (user) {
@@ -33,7 +30,7 @@ const App = () => {
       <div>
         <Notification/>
         <h2>Log in to application</h2>
-        <Login username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
+        <Login/>
       </div>
     )
   }
@@ -43,8 +40,8 @@ const App = () => {
       <Notification/>
       <h2>blogs</h2>
       <Router>
-        <Link style={{padding:"5px"}} to="/">blogs</Link>
-        <Link style={{padding:"5px"}} to="/users">users</Link>
+        <Link style={{ padding:'5px' }} to="/">blogs</Link>
+        <Link style={{ padding:'5px' }} to="/users">users</Link>
         <Header />
         <Routes>
           <Route path='/users' element={<Users/>}></Route>

@@ -5,15 +5,15 @@ import { useState } from 'react'
 
 test('renders content', async () => {
   const blog = {
-    title: "Checking rendering",
-    author: "FSO",
-    url: "fso.com",
+    title: 'Checking rendering',
+    author: 'FSO',
+    url: 'fso.com',
     likes: 0,
     showFull: false
   }
 
   render(<Blog blog={blog} blogs={[blog]} setBlogs={() => {}} />)
-  const element = screen.getByText("Checking rendering FSO")
+  const element = screen.getByText('Checking rendering FSO')
   expect(element).toBeDefined()
   expect(screen.queryByText('fso.com')).toBeNull()
   expect(screen.queryByText('likes')).toBeNull()
@@ -21,9 +21,9 @@ test('renders content', async () => {
 
 test('view button renders all content', async () => {
   const blog = {
-    title: "Checking rendering",
-    author: "FSO",
-    url: "fso.com",
+    title: 'Checking rendering',
+    author: 'FSO',
+    url: 'fso.com',
     likes: 0,
     showFull: false
   }

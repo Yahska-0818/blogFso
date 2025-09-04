@@ -1,12 +1,15 @@
-import { useDispatch } from "react-redux"
-import { createBlog } from "../reducers/blogReducer"
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({setShowBlogForm,setTitle,setAuthor,setUrl,title,url,author,testUser }) => {
+const BlogForm = ({ setShowBlogForm,setTitle,setAuthor,setUrl,title,url,author,testUser }) => {
 
   const dispatch = useDispatch()
 
-  const addBlog = async (event) => {
+  const submitBlog = (event) => {
     event.preventDefault()
+    if (testUser) {
+      return { title, author, url }
+    }
     const blogObject = {
       title: title,
       author: author,
@@ -17,15 +20,6 @@ const BlogForm = ({setShowBlogForm,setTitle,setAuthor,setUrl,title,url,author,te
     setAuthor('')
     setUrl('')
     setShowBlogForm(false)
-  }
-
-  const submitBlog = (event) => {
-    event.preventDefault()
-    if (testUser) {
-      addBlog({ title, author, url })
-      return { title, author, url }
-    }
-    addBlog(event)
   }
 
   return (

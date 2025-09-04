@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 import BlogService from '../services/blogs'
-import { notificationAction } from "./notiReducer"
+import { notificationAction } from './notiReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -13,14 +13,14 @@ const blogSlice = createSlice({
       return action.payload
     },
     updateBlog(state, action) {
-      const updatedBlog = action.payload;
+      const updatedBlog = action.payload
       return state.map(blog =>
         blog.id !== updatedBlog.id ? blog : updatedBlog
       ).sort((a, b) => b.likes - a.likes)
     },
     filterAfterDelete(state, action) {
-      const id = action.payload;
-      return state.filter(blog => blog.id !== id);
+      const id = action.payload
+      return state.filter(blog => blog.id !== id)
     },
   }
 })

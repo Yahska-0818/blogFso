@@ -9,7 +9,7 @@ const trimmedBrowserGlobals = Object.fromEntries(
 )
 
 export default [
-  { ignores: ['dist'] },
+  { ignores: ['dist','playwright.config.js'] },
   {
     files: ['**/*.test.{js,jsx}'],
     languageOptions: {

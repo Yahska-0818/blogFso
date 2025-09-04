@@ -6,7 +6,7 @@ import BlogForm from './BlogForm'
 test('calls addBlog with right details when form is submitted', async () => {
   const user = userEvent.setup()
   const addBlog = vi.fn()
-  
+
   const MockEnvironment = () => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')

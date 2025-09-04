@@ -29,7 +29,7 @@ const BlogList = () => {
             <button onClick={() => setShowBlogForm(true)}>Create New Blog</button>
         }
       </div>
-      <ul style={{paddingLeft:"0"}} id='blogsList'>
+      <ul style={{ paddingLeft:'0' }} id='blogsList'>
         {blogs.map(blog =>
           <li key={blog.id} style={blogListStyle}><Link to={`/blogs/${blog.id}`}>{blog.title}</Link></li>
         )}

@@ -11,4 +11,4 @@ const getOne = async(id) => {
   return response.data
 }
 
-export default {getAll, getOne}
+export default { getAll, getOne }

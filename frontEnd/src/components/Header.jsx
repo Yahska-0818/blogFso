@@ -1,5 +1,5 @@
-import { useDispatch, useSelector } from "react-redux"
-import { logOutUser } from "../reducers/userReducer"
+import { useDispatch, useSelector } from 'react-redux'
+import { logOutUser } from '../reducers/userReducer'
 
 const Header = () => {
   const dispatch = useDispatch()

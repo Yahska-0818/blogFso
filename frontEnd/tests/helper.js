@@ -1,4 +1,3 @@
-import { expect } from "@playwright/test"
 const loginWith = async (page, username, password)  => {
   const loginTextboxes = await page.getByRole('textbox').all()
   await loginTextboxes[0].fill(username)
