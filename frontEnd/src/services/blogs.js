@@ -45,4 +45,12 @@ const getOne = async (id) => {
   return request.data
 }
 
-export default { getAll, setToken, create, addLike, remove, getOne }
+const commentBlog = async(id,content) => {
+  const config = {
+    headers: {Authorization: token}
+  }
+  const request = await axios.post(`${baseUrl}/${id}/comments`,{content:content},config)
+  return request.data
+}
+
+export default { getAll, setToken, create, addLike, remove, getOne, commentBlog }
